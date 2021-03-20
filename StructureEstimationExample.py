@@ -6,15 +6,20 @@ from PyCTBN import SamplePath
 from PyCTBN import StructureConstraintBasedEstimator
 
 
-def structure_constraint_based_estimation_example():
+class structure_constraint_based_estimation_example():
+   
     # <read the json files in ./data path>
-    read_files = glob.glob(os.path.join('./data', "*.json"))
+    read_files = glob.glob(os.path.join('./data', "data.json"))
     # <initialize a JsonImporter object for the first file>
+    
     importer = JsonImporter(file_path=read_files[0], samples_label='samples',
                             structure_label='dyn.str', variables_label='variables',
                             time_key='Time', variables_key='Name')
     # <import the data at index 0 of the outer json array>
     importer.import_data(0)
+    dati = importer._raw_data
+    strut=dati[0]['dyn.str']
+    print(strut)
     # construct a SamplePath Object passing a filled AbstractImporter object
     s1 = SamplePath(importer=importer)
     # build the trajectories

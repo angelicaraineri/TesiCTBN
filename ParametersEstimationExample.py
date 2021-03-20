@@ -5,9 +5,8 @@ from PyCTBN import ParametersEstimator
 import glob
 import os
 
-
-def main():
-    read_files = glob.glob(os.path.join('./data', "*.json")) #Take all json files in this dir
+class main():
+    read_files = glob.glob(os.path.join('./data', "data.json")) #Take all json files in this dir
     #import data
     importer = JsonImporter(read_files[0], 'samples', 'dyn.str', 'variables', 'Time', 'Name')
     importer.import_data(0)
