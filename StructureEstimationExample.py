@@ -1,4 +1,5 @@
 import glob
+import json
 import os
 
 from PyCTBN import JsonImporter
@@ -6,7 +7,7 @@ from PyCTBN import SamplePath
 from PyCTBN import StructureConstraintBasedEstimator
 
 
-class structure_constraint_based_estimation_example():
+def main():
    
     # <read the json files in ./data path>
     read_files = glob.glob(os.path.join('./data', "data.json"))
@@ -17,9 +18,12 @@ class structure_constraint_based_estimation_example():
                             time_key='Time', variables_key='Name')
     # <import the data at index 0 of the outer json array>
     importer.import_data(0)
-    dati = importer._raw_data
-    strut=dati[0]['dyn.str']
-    print(strut)
+    #dati = importer._raw_data
+    # strut=dati[0]['dyn.str']
+    strut = importer._raw_data[0]['dyn.str']
+    with open('./output/StrutturaStimata.json', 'w') as f:
+        json.dump(strut, f)
+    
     # construct a SamplePath Object passing a filled AbstractImporter object
     s1 = SamplePath(importer=importer)
     # build the trajectories
@@ -36,8 +40,13 @@ class structure_constraint_based_estimation_example():
     # obtain the adjacency matrix of the estimated structure
     print(se1.adjacency_matrix())
     # save the estimated structure  to a json file (remember to specify the path AND the .json extension)....
-    completeName =  os.path.join('./results' , "result66.json")
+    completeName =  os.path.join('./output' , "result.json")
     se1.save_results(completeName)
     # ...or save it also in a graphical model fashion (remember to specify the path AND the .png extension)
-    se1.save_plot_estimated_structure_graph(os.path.join('./results' , "result66.png"))
-
+    se1.save_plot_estimated_structure_graph(os.path.join('./output' , "result.png"))
+    
+    with open("./output/result.json") as BOB:
+        data=json.load(BOB)
+    strutt = data["links"]    
+    with open('StrutturaStimata1.json', 'w') as f:
+        json.dump(strutt, f)

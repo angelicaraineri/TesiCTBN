@@ -1,10 +1,9 @@
 import glob
 import os
-import ParametersEstimationExample as pe
+import StructureEstimationExample as se
 
 
 class main():
-    path = os.path.join('./data', "data.json")
-    pe.main()
+    se.main()
 
     
