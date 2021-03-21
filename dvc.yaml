@@ -9,3 +9,13 @@ stages:
     - output/estimateStructure.json
     - output/estimateStructure.png
     - output/realStructure.json
+  evaluate:
+    cmd: python f1score_calculate.py output/estimateStructure.json output/realStructure.json
+      output/f1score.json
+    deps:
+    - f1score_calculate.py
+    - output/estimateStructure.json
+    - output/realStructure.json
+    metrics:
+    - output/f1score.json:
+        cache: false

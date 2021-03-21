@@ -51,3 +51,5 @@ f1_scor = f1_score(y_actu, y_pred2)
 
 print("F1 score : {}".format(f1_scor))
 
+with open('./output/f1score.json', 'w') as f:
+        json.dump(f1_scor, f)
