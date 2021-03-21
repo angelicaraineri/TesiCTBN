@@ -127,3 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/networks_and_trajectories_ternary_data_01_3

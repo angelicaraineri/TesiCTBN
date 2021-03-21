@@ -1,1 +1,1 @@
-{"directed": true, "multigraph": false, "graph": {}, "nodes": [{"id": "Z"}, {"id": "Y"}, {"id": "X"}], "links": [{"source": "Z", "target": "Y"}, {"source": "Z", "target": "X"}, {"source": "Y", "target": "X"}, {"source": "X", "target": "Y"}]}
+{"directed": true, "multigraph": false, "graph": {}, "nodes": [{"id": "Y"}, {"id": "Z"}, {"id": "X"}], "links": [{"source": "Y", "target": "Z"}, {"source": "X", "target": "Y"}]}
