@@ -1,0 +1,11 @@
+stages:
+  prepare:
+    cmd: python main.py StructureEstimationExample.py data/networks_and_trajectories_ternary_data_01_3
+    deps:
+    - StructureEstimationExample.py
+    - data/networks_and_trajectories_ternary_data_01_3
+    - main.py
+    outs:
+    - output/estimateStructure.json
+    - output/estimateStructure.png
+    - output/realStructure.json
