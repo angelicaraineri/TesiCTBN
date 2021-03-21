@@ -1,0 +1,5 @@
+outs:
+- md5: 9133878686692bb95d9eca0e74d17c99.dir
+  size: 177186200
+  nfiles: 10
+  path: networks_and_trajectories_ternary_data_01_3
