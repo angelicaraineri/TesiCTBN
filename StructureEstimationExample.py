@@ -10,7 +10,7 @@ from PyCTBN import StructureConstraintBasedEstimator
 def main():
    
     # <read the json files in ./data path>
-    read_files = glob.glob(os.path.join('./data/networks_and_trajectories_ternary_data_01_3', "*.json"))
+    read_files = glob.glob(os.path.join('./data/networks_and_trajectories_ternary_data_01_3', "10.json"))
     # <initialize a JsonImporter object for the first file>
     
     importer = JsonImporter(file_path=read_files[0], samples_label='samples',

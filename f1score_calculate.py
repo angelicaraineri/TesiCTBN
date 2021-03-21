@@ -6,34 +6,42 @@ with open("./output/estimateStructure.json") as f:
     data = json.load(f)
     
 array = data["links"]
-linksP = []
+estimateLinks = []
 
 for x in range(len(array)):
-    linksP.append(array[x]["source"] + array[x]["target"])
+    estimateLinks.append(array[x]["source"] + array[x]["target"])
     
 
 with open("./output/realStructure.json") as f:
     data = json.load(f)
     
-linksR = []
+realLinks = []
 
 for x in range(len(data)):
-    linksR.append(data[x]["From"] + data[x]["To"])
+    realLinks.append(data[x]["From"] + data[x]["To"])
     
-linksP = sorted(linksP)
+estimateLinks = sorted(estimateLinks)
 
-linksR = sorted(linksR)
+realLinks = sorted(realLinks)
     
-y_pred = [1]*len(linksP)
-y_real = []
+y_real = [1]*len(realLinks)
+y_pred = []
 
 
-for x in range(len(linksR)):
-    if(linksR[x] == linksP[x]):
-        y_real.append(1)
+for x in range(len(realLinks)):
+    if realLinks[x] in estimateLinks:
+        y_pred.append(1)
     else:
-        y_real.append(0)
-            
+        y_pred.append(0)
+        
+if len(realLinks)>len(estimateLinks):
+    y_real.append(1)
+    y_pred.append(0)
+
+if len(realLinks)<len(estimateLinks):
+    y_real.append(0)
+    y_pred.append(1)
+       
 
 y_actu = pd.Series(y_real, name='Actual')
 y_pred2 = pd.Series(y_pred, name='Predicted')
