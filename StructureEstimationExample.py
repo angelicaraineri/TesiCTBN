@@ -21,7 +21,7 @@ def main():
     #dati = importer._raw_data
     # strut=dati[0]['dyn.str']
     strut = importer._raw_data[0]['dyn.str']
-    with open('./output/StrutturaStimata.json', 'w') as f:
+    with open('./output/realStructure.json', 'w') as f:
         json.dump(strut, f)
     
     # construct a SamplePath Object passing a filled AbstractImporter object
@@ -40,13 +40,8 @@ def main():
     # obtain the adjacency matrix of the estimated structure
     print(se1.adjacency_matrix())
     # save the estimated structure  to a json file (remember to specify the path AND the .json extension)....
-    completeName =  os.path.join('./output' , "result.json")
+    completeName =  os.path.join('./output' , "estimateStructure.json")
     se1.save_results(completeName)
     # ...or save it also in a graphical model fashion (remember to specify the path AND the .png extension)
-    se1.save_plot_estimated_structure_graph(os.path.join('./output' , "result.png"))
-    
-    with open("./output/result.json") as BOB:
-        data=json.load(BOB)
-    strutt = data["links"]    
-    with open('StrutturaStimata1.json', 'w') as f:
-        json.dump(strutt, f)
+    se1.save_plot_estimated_structure_graph(os.path.join('./output' , "estimateStructure.png"))
+
