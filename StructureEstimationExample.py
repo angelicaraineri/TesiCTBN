@@ -12,15 +12,15 @@ def main():
     # <read the json files in ./data path>
     read_files = glob.glob(os.path.join('./data/networks_and_trajectories_ternary_data_01_3', "*.json"))
     # <initialize a JsonImporter object for the first file>
-    
-    for i in range(1,11):
+    cont = 1
+    for i in range(0,10):
         importer = JsonImporter(file_path=read_files[i], samples_label='samples',
                                 structure_label='dyn.str', variables_label='variables',
                                 time_key='Time', variables_key='Name')
         # <import the data at index 0 of the outer json array>
         importer.import_data(0)
         strut = importer._raw_data[0]['dyn.str']
-        with open('./output/realStructure%s.json' %i, 'w') as f:
+        with open('./output/realStructure%s.json' %cont, 'w') as f:
             json.dump(strut, f)
     
         # construct a SamplePath Object passing a filled AbstractImporter object
@@ -39,8 +39,8 @@ def main():
         # obtain the adjacency matrix of the estimated structure
         print(se1.adjacency_matrix())
         # save the estimated structure  to a json file (remember to specify the path AND the .json extension)....
-        completeName =  os.path.join('./output' , "estimateStructure%s.json" %i)
+        completeName =  os.path.join('./output' , "estimateStructure%s.json" %cont)
         se1.save_results(completeName)
         # ...or save it also in a graphical model fashion (remember to specify the path AND the .png extension)
-        se1.save_plot_estimated_structure_graph(os.path.join('./output' , "estimateStructure.png"))
-
+        # se1.save_plot_estimated_structure_graph(os.path.join('./output' , "estimateStructure%s.png" %cont))
+        cont = cont+1

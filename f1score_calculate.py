@@ -2,6 +2,7 @@ import json
 from sklearn.metrics import f1_score
 import pandas as pd
 
+f1_tot=0
 for i in range(1,11):
 
     with open("./output/estimateStructure%s.json" %i) as f:
@@ -52,13 +53,22 @@ for i in range(1,11):
     f1_scor = f1_score(y_actu, y_pred2)
     
     print("F1 score : {}".format(f1_scor))
+
+    f1_tot += f1_scor
     
+    """
     with open('./output/f1score%s.json' %i, 'w') as f:
             json.dump(f1_scor, f)
             
 f1_tot = 0
 for i in range(1, 11):
-   with open('./output/f1score%s.json' %i, 'w') as f:
+   with open('./output/f1score%s.json' %i, 'r') as f:
         data = json.load(f)
         f1_tot += data
-    
+"""
+f1_mean = f1_tot/10
+
+print("F1 medio : {}".format(f1_mean))    
+
+with open('./output/f1scoremean.json' , 'w') as f:
+	json.dump(f1_mean, f)
