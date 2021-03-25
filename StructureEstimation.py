@@ -5,9 +5,13 @@ import os
 from PyCTBN import JsonImporter
 from PyCTBN import SamplePath
 from PyCTBN import StructureConstraintBasedEstimator
+import yaml
+from sklearn.utils import resample
+import random
 
 
-def main():
+
+class main():
    
     # <read the json files in ./data path>
     read_files = glob.glob(os.path.join('./data/networks_and_trajectories_ternary_data_01_3', "*.json"))
@@ -17,8 +21,20 @@ def main():
         importer = JsonImporter(file_path=read_files[i], samples_label='samples',
                                 structure_label='dyn.str', variables_label='variables',
                                 time_key='Time', variables_key='Name')
-        # <import the data at index 0 of the outer json array>
+        
         importer.import_data(0)
+        
+        with open('params.yaml') as file:
+            documents = yaml.full_load(file)
+            number_trajectories = documents['feature']['number_trajectories']
+            print(number_trajectories)
+        
+        if (number_trajectories != 300):
+            samples = importer._raw_data[0]['samples']
+            y = random.sample(samples, number_trajectories)
+            newSamples = resample(y, n_samples=300, replace=True,random_state=0)
+            importer._raw_data[0]['samples'] = newSamples
+        
         strut = importer._raw_data[0]['dyn.str']
         with open('./output/realStructure%s.json' %cont, 'w') as f:
             json.dump(strut, f)
