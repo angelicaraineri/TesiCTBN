@@ -4,22 +4,22 @@ stages:
     cmd: python StructureEstimation.py data
     deps:
     - path: StructureEstimation.py
-      md5: 5a2d2e6a0b48284acfc99f87c6d6ba55
+      md5: d39b3e5dacf339c6fa27b26bc4bf5ffa
       size: 2910
     - path: data
-      md5: 013e45c738d355e7dd128f29d008b3af.dir
-      size: 177186463
-      nfiles: 12
+      md5: 5d7b9c7489226c65369adcb8d3ea8982.dir
+      size: 450176328
+      nfiles: 22
     - path: params.yaml
-      md5: 3239531d7a44b07b069660cd494d9cba
-      size: 65
+      md5: 19378eaac8ed5c556f8003b52dfef433
+      size: 64
     params:
       params.yaml:
-        feature.number_trajectories: 150
-        feature.number_variables: 3
+        feature.number_trajectories: 300
+        feature.number_variables: 4
     outs:
     - path: output/realStructure1.json
-      md5: b98df272d7968df14a21fb6c324c0fe4
+      md5: 06d8fb08c2cf3fa70d179b96ddf5c40d
       size: 52
   evaluate:
     cmd: python f1score_calculate.py output/realStructure1.json output/metric.json
@@ -28,12 +28,12 @@ stages:
       md5: 4d1874a5eb1d8a1a81b71549b6c37cdf
       size: 2119
     - path: output/realStructure1.json
-      md5: b98df272d7968df14a21fb6c324c0fe4
+      md5: 06d8fb08c2cf3fa70d179b96ddf5c40d
       size: 52
     - path: params.yaml
-      md5: 3239531d7a44b07b069660cd494d9cba
-      size: 65
+      md5: 19378eaac8ed5c556f8003b52dfef433
+      size: 64
     outs:
     - path: output/metric.json
-      md5: c9827262b1aa8afc30baa1e0eec9901c
+      md5: e84e8421fc16a8f774bf160cd9229e5d
       size: 102
