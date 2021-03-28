@@ -1,0 +1,25 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python StructureEstimation.py
+    deps:
+    - path: StructureEstimation.py
+      md5: 5a2d2e6a0b48284acfc99f87c6d6ba55
+      size: 2848
+    - path: data/networks_and_trajectories_ternary_data_01_3/
+      md5: 9133878686692bb95d9eca0e74d17c99.dir
+      size: 177186200
+      nfiles: 10
+    params:
+      params.yaml:
+        feature.number_trajectories: 150
+  evaluate:
+    cmd: python f1score_calculate.py output/f1scoremean.json
+    deps:
+    - path: f1score_calculate.py
+      md5: 1d5932f3c1df3e2ad28dd5a51bd51805
+      size: 1758
+    outs:
+    - path: output/f1scoremean.json
+      md5: 1ad17eb25bffc92af62d453a13c5612c
+      size: 18

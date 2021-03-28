@@ -1,0 +1,15 @@
+stages:
+  prepare:
+    cmd: python StructureEstimation.py
+    deps:
+    - StructureEstimation.py
+    - data/networks_and_trajectories_ternary_data_01_3/
+    params:
+    - feature.number_trajectories
+  evaluate:
+    cmd: python f1score_calculate.py output/f1scoremean.json
+    deps:
+    - f1score_calculate.py
+    metrics:
+    - output/f1scoremean.json:
+        cache: false
