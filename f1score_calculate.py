@@ -1,3 +1,4 @@
+import yaml
 import json
 from sklearn.metrics import f1_score
 import pandas as pd
@@ -68,7 +69,17 @@ for i in range(1, 11):
 """
 f1_mean = f1_tot/10
 
+with open('params.yaml') as file:
+   documents = yaml.full_load(file)
+   number_trajectories = documents['feature']['number_trajectories']
+   number_variables = documents['feature']['number_variables']
+
+json_data = {
+   'F1 score medio' : f1_mean,
+   'Numero variabili' : number_variables,
+   'Numbero traiettorie indipendenti' : number_trajectories
+}
 print("F1 medio : {}".format(f1_mean))    
 
-with open('./output/f1scoremean.json' , 'w') as f:
-	json.dump(f1_mean, f)
+with open('./output/metric.json' , 'w') as f:
+	json.dump(json_data, f)

@@ -1,2 +1,3 @@
 feature:
     number_trajectories : 150
+    number_variables : 4

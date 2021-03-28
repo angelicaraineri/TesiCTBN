@@ -11,11 +11,11 @@ stages:
       size: 450176328
       nfiles: 22
     - path: params.yaml
-      md5: 19378eaac8ed5c556f8003b52dfef433
+      md5: 3a4e897da1c89041f611cf60eee0c7d1
       size: 64
     params:
       params.yaml:
-        feature.number_trajectories: 300
+        feature.number_trajectories: 150
         feature.number_variables: 4
     outs:
     - path: output/realStructure1.json
@@ -31,9 +31,9 @@ stages:
       md5: 06d8fb08c2cf3fa70d179b96ddf5c40d
       size: 52
     - path: params.yaml
-      md5: 19378eaac8ed5c556f8003b52dfef433
+      md5: 3a4e897da1c89041f611cf60eee0c7d1
       size: 64
     outs:
     - path: output/metric.json
-      md5: e84e8421fc16a8f774bf160cd9229e5d
+      md5: 66d138360d26ed6b12a5b00df7b0096d
       size: 102
