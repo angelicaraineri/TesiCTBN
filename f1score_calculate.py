@@ -1,5 +1,4 @@
 import yaml
-from sklearn.metrics import confusion_matrix
 import json
 from sklearn.metrics import f1_score
 import pandas as pd
@@ -7,7 +6,7 @@ import pandas as pd
 f1_tot=0
 for i in range(1,11):
 
-    with open("./output/estimateStructure%s.json" %i) as f:
+    with open("./output/Structure/estimateStructure%s.json" %i) as f:
         data = json.load(f)
         
     array = data["links"]
@@ -17,20 +16,14 @@ for i in range(1,11):
         estimateLinks.append(array[x]["source"] + array[x]["target"])
         
     
-    with open("./output/realStructure%s.json" %i) as f:
+    with open("./output/Structure/realStructure%s.json" %i) as f:
         data = json.load(f)
         
     realLinks = []
     
     for x in range(len(data)):
         realLinks.append(data[x]["From"] + data[x]["To"])
-        
-    estimateLinks = sorted(estimateLinks)
     
-    realLinks = sorted(realLinks)
-        
-    cf = confusion_matrix(realLinks, estimateLinks)
-    print(cf)
     y_real = [1]*len(realLinks)
     y_pred = []
     
@@ -51,25 +44,16 @@ for i in range(1,11):
            
     
     y_actu = pd.Series(y_real, name='Actual')
-    y_pred2 = pd.Series(y_pred, name='Predicted')
-    df_confusion = pd.crosstab(y_actu, y_pred2)
-    #print(df_confusion)
-    f1_scor = f1_score(y_actu, y_pred2)    
-    print("F1 score : {}".format(f1_scor))
+    y_pred = pd.Series(y_pred, name='Predicted')
+    df_confusion = pd.crosstab(y_pred, y_actu)
+    print(df_confusion)
+    f1 = f1_score(y_actu, y_pred)    
+    print("F1 score : {}".format(f1))
 
-    f1_tot += f1_scor
+    f1_tot += f1
     
-    """
-    with open('./output/f1score%s.json' %i, 'w') as f:
-            json.dump(f1_scor, f)
-            
-f1_tot = 0
-for i in range(1, 11):
-   with open('./output/f1score%s.json' %i, 'r') as f:
-        data = json.load(f)
-        f1_tot += data
-"""
 f1_mean = f1_tot/10
+print("F1 medio : {}".format(f1_mean)) 
 
 with open('params.yaml') as file:
    documents = yaml.full_load(file)
@@ -79,9 +63,17 @@ with open('params.yaml') as file:
 json_data = {
    'F1 score medio' : f1_mean,
    'Numero variabili' : number_variables,
-   'Numbero traiettorie indipendenti' : number_trajectories
-}
-print("F1 medio : {}".format(f1_mean))    
+   'Numbero traiettorie indipendenti' : number_trajectories,
+   'Confusion matrix' : df_confusion.to_json()
+}   
 
-with open('./output/metric.json' , 'w') as f:
+with open('./output/metrics.json' , 'w') as f:
+	json.dump(json_data, f)
+
+json_data = {
+    'F1 score' : f1_mean,
+    'Number of variables' : number_variables
+}  
+
+with open('./output/metrics_to_plot.json' , 'a') as f:
 	json.dump(json_data, f)
