@@ -1,4 +1,5 @@
 import yaml
+from sklearn.metrics import confusion_matrix
 import json
 from sklearn.metrics import f1_score
 import pandas as pd
@@ -28,6 +29,8 @@ for i in range(1,11):
     
     realLinks = sorted(realLinks)
         
+    cf = confusion_matrix(realLinks, estimateLinks)
+    print(cf)
     y_real = [1]*len(realLinks)
     y_pred = []
     
@@ -50,9 +53,8 @@ for i in range(1,11):
     y_actu = pd.Series(y_real, name='Actual')
     y_pred2 = pd.Series(y_pred, name='Predicted')
     df_confusion = pd.crosstab(y_actu, y_pred2)
-    
-    f1_scor = f1_score(y_actu, y_pred2)
-    
+    #print(df_confusion)
+    f1_scor = f1_score(y_actu, y_pred2)    
     print("F1 score : {}".format(f1_scor))
 
     f1_tot += f1_scor
