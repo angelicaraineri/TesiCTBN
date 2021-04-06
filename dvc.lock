@@ -1,39 +1,40 @@
 schema: '2.0'
 stages:
   prepare:
-    cmd: python StructureEstimation.py data
+    cmd: python3 structureEstimation.py data
     deps:
-    - path: StructureEstimation.py
-      md5: d39b3e5dacf339c6fa27b26bc4bf5ffa
-      size: 2910
     - path: data
-      md5: 5d7b9c7489226c65369adcb8d3ea8982.dir
-      size: 450176328
-      nfiles: 22
+      md5: b23da038ef71939029ea7926fab02002.dir
+      size: 23764466422
+      nfiles: 201
     - path: params.yaml
-      md5: 3a4e897da1c89041f611cf60eee0c7d1
-      size: 64
+      md5: 0c4b5c9c67d3899d730f377045bd99d4
+      size: 126
+    - path: structureEstimation.py
+      md5: 2a34a1c713db85c2584ee15aeec06143
+      size: 2770
     params:
       params.yaml:
-        feature.number_trajectories: 150
-        feature.number_variables: 4
+        feature.number_nodes: 10
+        feature.number_trajectories: 300
+        feature.path: ./data/networks_and_trajectories_ternary_data_01_10
     outs:
-    - path: output/realStructure1.json
-      md5: 06d8fb08c2cf3fa70d179b96ddf5c40d
-      size: 52
+    - path: output/Structure/realStructure1.json
+      md5: eb7c99486b0ceaeafa1b35d15af8b759
+      size: 260
   evaluate:
-    cmd: python f1score_calculate.py output/realStructure1.json output/metric.json
+    cmd: python3 metricsCalculator.py output/Structure/realStructure1.json output/metrics.json
     deps:
-    - path: f1score_calculate.py
-      md5: 4d1874a5eb1d8a1a81b71549b6c37cdf
-      size: 2119
-    - path: output/realStructure1.json
-      md5: 06d8fb08c2cf3fa70d179b96ddf5c40d
-      size: 52
+    - path: metricsCalculator.py
+      md5: 99cdbcc9aec4d82264d75000d639fa8e
+      size: 2301
+    - path: output/Structure/realStructure1.json
+      md5: eb7c99486b0ceaeafa1b35d15af8b759
+      size: 260
     - path: params.yaml
-      md5: 3a4e897da1c89041f611cf60eee0c7d1
-      size: 64
+      md5: 0c4b5c9c67d3899d730f377045bd99d4
+      size: 126
     outs:
-    - path: output/metric.json
-      md5: 66d138360d26ed6b12a5b00df7b0096d
-      size: 102
+    - path: output/metrics.json
+      md5: 168be9d9fe06938c6a1bb832193b4274
+      size: 1784

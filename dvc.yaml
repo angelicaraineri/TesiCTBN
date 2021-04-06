@@ -1,21 +1,23 @@
 stages:
   prepare:
-    cmd: python StructureEstimation.py data
+    cmd: python3 structureEstimation.py data
     deps:
-    - StructureEstimation.py
+    - structureEstimation.py
     - data
     - params.yaml
     params:
     - feature.number_trajectories
-    - feature.number_variables
+    - feature.number_nodes
+    - feature.path
     outs:
-    - output/realStructure1.json
+    - output/Structure/realStructure1.json
   evaluate:
-    cmd: python f1score_calculate.py output/realStructure1.json output/metric.json
+    cmd: python3 metricsCalculator.py output/Structure/realStructure1.json output/metrics.json
     deps:
-    - f1score_calculate.py
+    - metricsCalculator.py
     - params.yaml
-    - output/realStructure1.json
+    - output/Structure/realStructure1.json
     metrics:
-    - output/metric.json:
+    - output/metrics.json:
         cache: false
+
