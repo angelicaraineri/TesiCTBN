@@ -1,23 +1,53 @@
 stages:
-  prepare:
-    cmd: python3 structureEstimation.py data
+  feature:
+    cmd: python3.8 structureEstimation.py
     deps:
     - structureEstimation.py
-    - data
-    - params.yaml
     params:
+    - feature.cardinality
+    - feature.density
     - feature.number_trajectories
-    - feature.number_nodes
-    - feature.path
+    - feature.number_variables
     outs:
-    - output/Structure/realStructure1.json
+    - output/estimateStructure.json
+    - output/realStructure.json
   evaluate:
-    cmd: python3 metricsCalculator.py output/Structure/realStructure1.json output/metrics.json
+    cmd: python3.8 metricsCalculator.py output/realStructure.json output/estimateStructure.json
     deps:
     - metricsCalculator.py
-    - params.yaml
-    - output/Structure/realStructure1.json
+    - output/realStructure.json
+    - output/estimateStructure.json
     metrics:
-    - output/metrics.json:
-        cache: false
+            - output/metrics.json:
+                    cache: false
+    plots:
+    - output/Graphs/binary_01.pdf:
+            cache: false 
+    - output/Graphs/binary_02.pdf:
+            cache: false
+    - output/Graphs/binary_03.pdf:
+            cache: false
+    - output/Graphs/ternary_01.pdf:
+            cache: false
+    - output/Graphs/ternary_02.pdf:
+            cache: false
+    - output/Graphs/ternary_03.pdf:
+            cache: false
+    - output/Graphs/ternary_03.pdf:
+            cache: false 
+    - output/Graphs/quaternary_01.pdf:
+            cache: false
+    - output/Graphs/quaternary_02.pdf:
+            cache: false
+    - output/Graphs/quaternary_03.pdf:
+            cache: false
+
+
+
+
+
+
+
+
+
 

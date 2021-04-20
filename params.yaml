@@ -1,9 +1,16 @@
 feature:
     number_trajectories : 300
-    number_variables : 
+    number_variables :
         - 3
         - 4
+        - 5
+        - 6
+        - 10
     density :
         - 01
+        - 02
+        - 03
     cardinality :
         - binary
+        - ternary
+        - quaternary

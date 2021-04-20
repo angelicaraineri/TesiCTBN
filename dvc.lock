@@ -1,40 +1,75 @@
 schema: '2.0'
 stages:
-  prepare:
-    cmd: python3 structureEstimation.py data
+  feature:
+    cmd: python3.8 structureEstimation.py
     deps:
-    - path: data
-      md5: b23da038ef71939029ea7926fab02002.dir
-      size: 23764466422
-      nfiles: 201
-    - path: params.yaml
-      md5: 0c4b5c9c67d3899d730f377045bd99d4
-      size: 126
     - path: structureEstimation.py
-      md5: 2a34a1c713db85c2584ee15aeec06143
-      size: 2770
+      md5: cdd40bbe5c8eea7a92843f5e43514509
+      size: 3932
     params:
       params.yaml:
-        feature.number_nodes: 10
+        feature.cardinality:
+        - binary
+        - ternary
+        - quaternary
+        feature.density:
+        - 1
+        - 2
+        - 3
         feature.number_trajectories: 300
-        feature.path: ./data/networks_and_trajectories_ternary_data_01_10
+        feature.number_variables:
+        - 3
+        - 4
+        - 5
+        - 6
+        - 10
     outs:
-    - path: output/Structure/realStructure1.json
-      md5: eb7c99486b0ceaeafa1b35d15af8b759
-      size: 260
+    - path: output/estimateStructure.json
+      md5: 58859225790c2d330ec324856fa3eebf
+      size: 75231
+    - path: output/realStructure.json
+      md5: 752f03f4567012b5772f92dd54d90ad7
+      size: 185951
   evaluate:
-    cmd: python3 metricsCalculator.py output/Structure/realStructure1.json output/metrics.json
+    cmd: python3.8 metricsCalculator.py output/realStructure.json output/estimateStructure.json
     deps:
     - path: metricsCalculator.py
-      md5: 99cdbcc9aec4d82264d75000d639fa8e
-      size: 2301
-    - path: output/Structure/realStructure1.json
-      md5: eb7c99486b0ceaeafa1b35d15af8b759
-      size: 260
-    - path: params.yaml
-      md5: 0c4b5c9c67d3899d730f377045bd99d4
-      size: 126
+      md5: e6a4feefc1261e620518f9f5def5d123
+      size: 5303
+    - path: output/estimateStructure.json
+      md5: 58859225790c2d330ec324856fa3eebf
+      size: 75231
+    - path: output/realStructure.json
+      md5: 752f03f4567012b5772f92dd54d90ad7
+      size: 185951
     outs:
+    - path: output/Graphs/binary_01.pdf
+      md5: ca397231205f835b7f1a64969e635a8f
+      size: 13408
+    - path: output/Graphs/binary_02.pdf
+      md5: ca0ee5dfb26e45ed3e42569d93d1155c
+      size: 13632
+    - path: output/Graphs/binary_03.pdf
+      md5: 84abfd60c12b5511f59a3eae0682d8e3
+      size: 13313
+    - path: output/Graphs/quaternary_01.pdf
+      md5: a3eb62d744b0fb804f08ec514857649d
+      size: 13602
+    - path: output/Graphs/quaternary_02.pdf
+      md5: e3e4adbe1d4fe5aaa7aeba52132a5fde
+      size: 13417
+    - path: output/Graphs/quaternary_03.pdf
+      md5: e49389e4cf30e1a413e68e48d08fff5c
+      size: 13724
+    - path: output/Graphs/ternary_01.pdf
+      md5: 651feebb6fb95d5c5bfb53833e82e9a8
+      size: 13061
+    - path: output/Graphs/ternary_02.pdf
+      md5: 5fbbcaa753d5385e9e6b0c1a6c892453
+      size: 13735
+    - path: output/Graphs/ternary_03.pdf
+      md5: c0710604c339656c1193ace011e850a1
+      size: 13387
     - path: output/metrics.json
-      md5: 168be9d9fe06938c6a1bb832193b4274
-      size: 1784
+      md5: a012831d8f1d8ba5053a2402d746c911
+      size: 77991
