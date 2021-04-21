@@ -16,7 +16,7 @@ stages:
         - 1
         - 2
         - 3
-        feature.number_trajectories: 300
+        feature.number_trajectories: 150
         feature.number_variables:
         - 3
         - 4
@@ -25,7 +25,7 @@ stages:
         - 10
     outs:
     - path: output/estimateStructure.json
-      md5: 58859225790c2d330ec324856fa3eebf
+      md5: 6926bc392fcfc2dbd20c1da582a83994
       size: 75231
     - path: output/realStructure.json
       md5: 752f03f4567012b5772f92dd54d90ad7
@@ -34,42 +34,42 @@ stages:
     cmd: python3.8 metricsCalculator.py output/realStructure.json output/estimateStructure.json
     deps:
     - path: metricsCalculator.py
-      md5: e6a4feefc1261e620518f9f5def5d123
-      size: 5303
+      md5: 380927c8792a7b76a9761007133767d2
+      size: 5613
     - path: output/estimateStructure.json
-      md5: 58859225790c2d330ec324856fa3eebf
+      md5: 6926bc392fcfc2dbd20c1da582a83994
       size: 75231
     - path: output/realStructure.json
       md5: 752f03f4567012b5772f92dd54d90ad7
       size: 185951
     outs:
     - path: output/Graphs/binary_01.pdf
-      md5: ca397231205f835b7f1a64969e635a8f
-      size: 13408
+      md5: bdb7a5c83e7ece4902d1fddb83ef51ff
+      size: 13409
     - path: output/Graphs/binary_02.pdf
-      md5: ca0ee5dfb26e45ed3e42569d93d1155c
+      md5: 737fb51d8a73cc3cca05cde7809aef84
       size: 13632
     - path: output/Graphs/binary_03.pdf
-      md5: 84abfd60c12b5511f59a3eae0682d8e3
+      md5: 62d8d4236aeca687d6eef8c7ecb61c78
       size: 13313
     - path: output/Graphs/quaternary_01.pdf
-      md5: a3eb62d744b0fb804f08ec514857649d
-      size: 13602
+      md5: 21547795f810874fd2cfbdafddbff77a
+      size: 13603
     - path: output/Graphs/quaternary_02.pdf
-      md5: e3e4adbe1d4fe5aaa7aeba52132a5fde
-      size: 13417
+      md5: 683be705e47efe1dec2b97d2c4e7dfb6
+      size: 13418
     - path: output/Graphs/quaternary_03.pdf
-      md5: e49389e4cf30e1a413e68e48d08fff5c
+      md5: 8ba04a12a2acfc25eca03771a9f7a384
       size: 13724
     - path: output/Graphs/ternary_01.pdf
-      md5: 651feebb6fb95d5c5bfb53833e82e9a8
+      md5: 9c61bc00a4a73c7ed9fbce9ab9073f4f
       size: 13061
     - path: output/Graphs/ternary_02.pdf
-      md5: 5fbbcaa753d5385e9e6b0c1a6c892453
-      size: 13735
+      md5: 6a88a1b395991d155568ce2e6910a57c
+      size: 13736
     - path: output/Graphs/ternary_03.pdf
-      md5: c0710604c339656c1193ace011e850a1
+      md5: d92f23721788b834b120f953f61fba6e
       size: 13387
     - path: output/metrics.json
-      md5: a012831d8f1d8ba5053a2402d746c911
-      size: 77991
+      md5: 334a3669354d951287795af9fe4d34a9
+      size: 58191
