@@ -11,6 +11,7 @@ from itertools import chain
 
 
 json_data = {}
+json_data_mean = {}
 list_variables = []
 binary = []
 ternary = []
@@ -35,28 +36,26 @@ def adj_list_to_adj_matrix_estimate(adj_list, variables):
 
 def confusion_matrix(real, predicted):
     p_minus_t = predicted - real
-    
-    global fp
-    fp = np.sum(p_minus_t > 0)
-    global fn
-    fn = np.sum(p_minus_t < 0)
-    global tp
-    tp = np.sum(real == 1) - fn
-    global tn
-    tn = np.sum(real == 0) - fn
-        
-    ret = np.array([[tp, fp] , [fn, tn]], dtype = int)
-    return ret
 
-def plot_dataset(data_x_axis, data_y_axis,density, cardinality):
+    fp = np.sum(p_minus_t > 0)
+    fn = np.sum(p_minus_t < 0)
+    tp = np.sum(real == 1) - fn
+    tn = np.sum(real == 0) - fp - real.shape[0]      
+
+    ret = np.array([[tp, fp] , [fn, tn]], dtype = int)
+    
+    return ret, fp, fn, tp, tn
+
+def plot_dataset(data_x_axis, data_y_axis,density, cardinality, number_trajectories):
     dataset = pd.DataFrame({'f1 score': data_y_axis, 'number of variables' : data_x_axis})
     ax = sns.lineplot( x = 'number of variables' , y = 'f1 score', marker = 'o', data = dataset)
     ax.set_xticks(data_x_axis)
     ax.set_title(cardinality+" data with 0"+str(density)+" density and "+ \
 str(number_trajectories)+" indipendent trajectories")
-    name = cardinality+"_0"+str(density)
+    name = "/"+number_trajectories+"/"+cardinality+"_0"+str(density)
     ax = ax.get_figure()
     ax.savefig("output/Graphs/%s.pdf" %name)
+    print("Saving graph " , name)
     ax.clf()
 
 def build_dataset(data_to_plot):
@@ -64,10 +63,19 @@ def build_dataset(data_to_plot):
     data_y_axis.append(statistics.mean(data_to_plot))
     return data_x_axis, data_y_axis
 
-#array_nodes = [[3], [4], [5], [6], [10], [15], [20]]
-array_nodes = [[3], [4], [5], [6], [10]]
+def calculate_f1(res):
+    fp = res[1]
+    fn = res[2]
+    tp = res[3]
+    tn = res[4]
+    recall = tp / (tp + fn)
+    precision = tp / (tp + fp)
+    f1 = 2*((precision*recall)/(precision + recall))
+    return f1
 
-for i in range(3): # cardinality = 01, 02, 03, 04
+array_nodes = [[3], [4], [5], [6], [10], [15], [20]]
+
+for i in range(4): # cardinality = 01, 02, 03, 04
     binary.append([])
     ternary.append([]) 
     quaternary.append([])
@@ -78,7 +86,7 @@ for i in range(3): # cardinality = 01, 02, 03, 04
 
 with open('params.yaml') as file:
     documents = yaml.full_load(file)
-    number_trajectories = documents['feature']['number_trajectories']
+    number_trajectories = str(documents['feature']['number_trajectories'])
 
 with open("./output/estimateStructure.json") as f:
     estimate_data = json.load(f)
@@ -94,14 +102,11 @@ for item in estimate_data:
     struct_real = real_data.get(item)[0]
     variables = real_data.get(item)[1]
 
-    conf = confusion_matrix(adj_list_to_adj_matrix_real(struct_real, variables),\
+    res = confusion_matrix(adj_list_to_adj_matrix_real(struct_real, variables),\
             adj_list_to_adj_matrix_estimate(struct_estimate, variables))
-    
+    conf = res[0]
     #print("CONFUSION MATRIX : " , conf)
-
-    recall = tp / (tp + fn)
-    precision = tp / (tp + fp)
-    f1_score = 2*((precision*recall)/(precision + recall))
+    f1_score = calculate_f1(res)
     #print("F1 SCORE " , f1_score)
     
     cardinality = item.split("/")[2].split("_")[3]
@@ -128,40 +133,30 @@ for item in estimate_data:
         ternary[density - 1][index].append(f1_score)
     elif (cardinality == "quaternary"):
         quaternary[density - 1][index].append(f1_score)
-                
-    json_data['File %s' %item] = {
-      'F1 score' : f1_score,
-      'Numbero of indipendent trajectories' : number_trajectories,
-      'Confusion matrix' : conf.tolist()
+    
+    json_data["File %s" %item] = {
+            'F1 score' : f1_score,
+            'Number of indipendent trajectories' : number_trajectories,
+            'Confusion matrix' : conf.tolist()
     }
     with open('./output/metrics.json' , 'w') as f:
-        json.dump(json_data, f)
+        json.dump(json_data, f) 
 
 data_x_axis = []
 data_y_axis = []
 
 
-for i in range(len(binary)):
-    for x in range(len(binary[i])): #all values for density = i
-        data_to_plot = list(binary[i][x])
-        result = build_dataset(data_to_plot)
-    plot_dataset(result[0], result[1], i + 1, "binary")
-    data_x_axis = []
-    data_y_axis = []
+def fetch_data(array, cardinality):
+    for i in range(len(array)):
+        for x in range(len(array[i])): #all values for density = i
+            data_to_plot = list(array[i][x])
+            result = build_dataset(data_to_plot)
+        plot_dataset(result[0], result[1], i + 1, cardinality, number_trajectories)
+        data_x_axis = []
+        data_y_axis = []
 
-for i in range(len(ternary)):
-    for x in range(len(ternary[i])): #all values for density = i
-        data_to_plot = list(ternary[i][x])
-        result = build_dataset(data_to_plot)
-    plot_dataset(result[0], result[1], i + 1, "ternary")
-    data_x_axis = []
-    data_y_axis = []
 
-for i in range(len(quaternary)):
-    for x in range(len(quaternary[i])): #all values for density = i     
-        data_to_plot = list(quaternary[i][x])
-        result = build_dataset(data_to_plot)
-    plot_dataset(result[0], result[1], i + 1, "quaternary")
-    data_x_axis = []
-    data_y_axis = []
+fetch_data(binary, "binary")
+fetch_data(ternary, "ternary")
+fetch_data(quaternary, "quaternary")
 

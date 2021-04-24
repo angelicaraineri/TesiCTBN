@@ -1,15 +1,18 @@
 feature:
-    number_trajectories : 300
+    number_trajectories : 150x2
     number_variables :
         - 3
         - 4
         - 5
         - 6
         - 10
+        - 15
+        - 20
     density :
         - 01
         - 02
         - 03
+        - 04
     cardinality :
         - binary
         - ternary

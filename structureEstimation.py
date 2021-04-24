@@ -1,3 +1,4 @@
+import multiprocessing
 import glob
 import json
 import os
@@ -11,7 +12,9 @@ import itertools
 
 
 class main():
-    
+    print(multiprocessing.cpu_count())
+    multiprocessing.Pool(4)
+    print(multiprocessing.cpu_count())
     y = []
     list_of_path = []
     list_of_combination = []
@@ -20,7 +23,7 @@ class main():
 
     with open('params.yaml') as file:
         documents = yaml.full_load(file)
-        number_trajectories = documents['feature']['number_trajectories']
+        number_trajectories = str(documents['feature']['number_trajectories'])
         number_variables = documents['feature']['number_variables']
         cardinality = documents['feature']['cardinality']
         density = documents['feature']['density']      
@@ -51,12 +54,15 @@ class main():
         
             importer.import_data(0)
 
-            if (number_trajectories != 300):
+            if (number_trajectories != "300"):
                 samples = importer._raw_data[0]['samples']
-                y = random.sample(samples, number_trajectories)
-                newSamples = resample(y, n_samples=300, replace=True,random_state=0)
-                importer._raw_data[0]['samples'] = newSamples
-        
+                y = random.sample(samples, 150)
+                if(number_trajectories == "150"):
+                    importer._raw_data[0]['samples'] = y
+                elif(number_trajectories == "150x2"):
+                    newSamples = resample(y, n_samples=300, replace=True,random_state=0)
+                    importer._raw_data[0]['samples'] = newSamples
+            
             strut = importer._raw_data[0]['dyn.str']
             var = importer._raw_data[0]['variables']
             
