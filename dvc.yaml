@@ -1,8 +1,9 @@
 stages:
   feature:
-    cmd: python3.8 structureEstimation.py
+    cmd: python3.8 structureEstimation.py data
     deps:
     - structureEstimation.py
+    - data
     params:
     - feature.cardinality
     - feature.density

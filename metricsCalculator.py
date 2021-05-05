@@ -11,12 +11,11 @@ from itertools import chain
 
 
 json_data = {}
-json_data_mean = {}
-list_variables = []
 binary = []
 ternary = []
 quaternary = []
-    
+ 
+
 def adj_list_to_adj_matrix_real(adj_list, variables):
     #print("REAL MATRIX " , adj_list)
     variables = pd.DataFrame(variables)
@@ -46,21 +45,41 @@ def confusion_matrix(real, predicted):
     
     return ret, fp, fn, tp, tn
 
+
 def plot_dataset(data_x_axis, data_y_axis,density, cardinality, number_trajectories):
     dataset = pd.DataFrame({'f1 score': data_y_axis, 'number of variables' : data_x_axis})
+    print(dataset) 
+    
+    id_1 = cardinality + "_0" + str(density)
+
+    id_2 = 0
+    if (number_trajectories == "150x2"):
+        id_2 = 1
+    elif (number_trajectories == "300"):
+        id_2 = 2
+   
+    for x in range(len(data_y_axis)):
+        to_plot[id_1][id_2].append(data_y_axis[x])
+
+    with open('./output/to_plot.json' , 'w') as f:
+        json.dump(to_plot, f)
+
     ax = sns.lineplot( x = 'number of variables' , y = 'f1 score', marker = 'o', data = dataset)
     ax.set_xticks(data_x_axis)
     ax.set_title(cardinality+" data with 0"+str(density)+" density and "+ \
 str(number_trajectories)+" indipendent trajectories")
-    name = "/"+number_trajectories+"/"+cardinality+"_0"+str(density)
+    name = number_trajectories+"/"+cardinality+"_0"+str(density)
     ax = ax.get_figure()
-    ax.savefig("output/Graphs/%s.pdf" %name)
+    ax.savefig("output/%s.pdf" %name)
     print("Saving graph " , name)
     ax.clf()
 
+    #dataset.drop(dataset.index[[0,(len(dataset.index)-1)]])
 def build_dataset(data_to_plot):
     data_x_axis.append(data_to_plot.pop(0))
-    data_y_axis.append(statistics.mean(data_to_plot))
+    mean = statistics.mean(data_to_plot)
+    data_y_axis.append(mean)
+    print(statistics.mean(data_to_plot))
     return data_x_axis, data_y_axis
 
 def calculate_f1(res):
@@ -83,18 +102,22 @@ for i in range(4): # cardinality = 01, 02, 03, 04
         binary[i].append(list(array_nodes[t]))
         ternary[i].append(list(array_nodes[t]))
         quaternary[i].append(list(array_nodes[t]))
+    quaternary[i].pop()
 
 with open('params.yaml') as file:
     documents = yaml.full_load(file)
-    number_trajectories = str(documents['feature']['number_trajectories'])
+    #number_trajectories = str(documents['feature']['number_trajectories'])
+    number_trajectories = "300"
 
-with open("./output/estimateStructure.json") as f:
+with open("./output/%s/estimateStructure.json" %number_trajectories) as f:
     estimate_data = json.load(f)
         
-with open("./output/realStructure.json") as f:
+with open("./output/%s/realStructure.json" %number_trajectories) as f:
     real_data = json.load(f)
 
-        
+with open("./output/to_plot.json") as f: 
+    to_plot = json.load(f)
+
 for item in estimate_data:
     #print(" ")
     print(item)
@@ -103,7 +126,7 @@ for item in estimate_data:
     variables = real_data.get(item)[1]
 
     res = confusion_matrix(adj_list_to_adj_matrix_real(struct_real, variables),\
-            adj_list_to_adj_matrix_estimate(struct_estimate, variables))
+                    adj_list_to_adj_matrix_estimate(struct_estimate, variables))
     conf = res[0]
     #print("CONFUSION MATRIX : " , conf)
     f1_score = calculate_f1(res)
@@ -140,11 +163,10 @@ for item in estimate_data:
             'Confusion matrix' : conf.tolist()
     }
     with open('./output/metrics.json' , 'w') as f:
-        json.dump(json_data, f) 
-
+        json.dump(json_data, f)
+    print("File metrics salvalto")
 data_x_axis = []
 data_y_axis = []
-
 
 def fetch_data(array, cardinality):
     for i in range(len(array)):
@@ -152,11 +174,11 @@ def fetch_data(array, cardinality):
             data_to_plot = list(array[i][x])
             result = build_dataset(data_to_plot)
         plot_dataset(result[0], result[1], i + 1, cardinality, number_trajectories)
-        data_x_axis = []
-        data_y_axis = []
-
+        del data_x_axis[:]
+        del data_y_axis[:]
 
 fetch_data(binary, "binary")
-fetch_data(ternary, "ternary")
-fetch_data(quaternary, "quaternary")
 
+fetch_data(ternary, "ternary")
+
+fetch_data(quaternary, "quaternary")

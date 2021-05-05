@@ -12,9 +12,6 @@ import itertools
 
 
 class main():
-    print(multiprocessing.cpu_count())
-    multiprocessing.Pool(4)
-    print(multiprocessing.cpu_count())
     y = []
     list_of_path = []
     list_of_combination = []
@@ -27,7 +24,7 @@ class main():
         number_variables = documents['feature']['number_variables']
         cardinality = documents['feature']['cardinality']
         density = documents['feature']['density']      
-
+    
     y.append(cardinality)
     y.append(density)
     y.append(number_variables)
@@ -42,10 +39,11 @@ class main():
             path ='./data/networks_and_trajectories_' + list_of_combination[x][0] + '_data_0' + str(list_of_combination[x][1]) + '_'+ str(list_of_combination[x][2])
         if (path != './data/networks_and_trajectories_quaternary_data_01_20' and path != './data/networks_and_trajectories_quaternary_data_02_20' and path != './data/networks_and_trajectories_quaternary_data_20'):
             list_of_path.append(path)
-               
+    
     for x in range(len(list_of_path)):
         read_files = glob.glob(os.path.join(list_of_path[x], "*.json"))
-        for i in range(0,10):
+        for i in range(len(read_files)):
+            print("Lunghezza " , len(read_files))
             print(" ")
             print(read_files[i])
             importer = JsonImporter(file_path=read_files[i], samples_label='samples',
@@ -54,14 +52,23 @@ class main():
         
             importer.import_data(0)
 
+            if (number_trajectories == "150x2"):
+                traj = 150
+            else:
+                traj = int(number_trajectories)
+
             if (number_trajectories != "300"):
                 samples = importer._raw_data[0]['samples']
-                y = random.sample(samples, 150)
+                y = random.sample(samples, traj)
                 if(number_trajectories == "150"):
                     importer._raw_data[0]['samples'] = y
                 elif(number_trajectories == "150x2"):
                     newSamples = resample(y, n_samples=300, replace=True,random_state=0)
                     importer._raw_data[0]['samples'] = newSamples
+                elif(number_trajectories == "300"):
+                    newSamples = resample(y, n_samples=300, replace=True,random_state=0)
+                    importer._raw_data[0]['samples'] = newSamples
+
             
             strut = importer._raw_data[0]['dyn.str']
             var = importer._raw_data[0]['variables']
@@ -73,7 +80,7 @@ class main():
     
             
             #with open('./output/realStructure.json' , 'w') as f:
-                #json.dump(json_data, f)
+                #json.dump(json_data_real, f)
     
             s1 = SamplePath(importer=importer)
             s1.build_trajectories()
@@ -83,16 +90,19 @@ class main():
             #se1.estimate_structure()
             #print(se1.adjacency_matrix())
             
-            json_data_est['%s' %read_files[i]] = list(se1.estimate_structure())
+            json_data_est['%s' %read_files[i]] = list(se1.estimate_structure(True, 2))
             #with open('./output/estimateStructure.json' , 'w') as f:
-                #json.dump(json_data2, f)
+                #json.dump(json_data_est, f)
+            #print("strutture salvate")
             
             #completeName =  os.path.join('./output/Structure' , "estimateStructure%s.json" %cont)
             #se1.save_results(completeName)
             # se1.save_plot_estimated_structure_graph(os.path.join('./output' , "estimateStructure%s.png" %cont))
             #cont = cont+1
+    
     with open('./output/realStructure.json' , 'w') as f:
         json.dump(json_data_real, f)
 
     with open('./output/estimateStructure.json' , 'w') as f:
         json.dump(json_data_est, f)
+    
