@@ -1,34 +1,34 @@
 stages:
-  feature:
-    cmd: python3.8 structureEstimation.py data
-    deps:
-    - structureEstimation.py
-    - data
-    params:
-    - feature.cardinality
-    - feature.density
-    - feature.number_trajectories
-    - feature.number_variables
-    outs:
-    - output/estimateStructure.json
-    - output/realStructure.json
-  evaluate:
-    cmd: python3.8 metricsCalculator.py output/realStructure.json output/estimateStructure.json
-    deps:
-    - metricsCalculator.py
-    - output/realStructure.json
-    - output/estimateStructure.json
-    metrics:
-            - output/metrics.json:
+  evaluate_structure:
+    foreach:
+        - 100
+        - 150
+        - 150x2
+        - 300
+    do:
+        cmd: python3.8 structureEstimation.py ${item}
+        deps:
+        - structureEstimation.py
+        params:
+        - feature.cardinality
+        - feature.density
+        - feature.number_variables
+        outs:
+        - output/${item}/estimateStructure.json
+        - output/${item}/realStructure.json
+  
+  evaluate_metrics:
+    foreach:
+        - 100
+        - 150
+        - 150x2
+        - 300
+    do:
+        cmd: python3.8 metricsCalculator.py ${item} output/${item}/realStructure.json output/${item}/estimateStructure.json
+        deps:
+        - metricsCalculator.py
+        - output/${item}/realStructure.json
+        - output/${item}/estimateStructure.json
+        metrics:
+            - output/${item}/metrics.json:
                     cache: false
-
-
-
-
-
-
-
-
-
-
-

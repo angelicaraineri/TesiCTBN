@@ -8,14 +8,14 @@ from sklearn.metrics import f1_score
 import pandas as pd
 import numpy as np
 from itertools import chain
-
+import sys
 
 json_data = {}
 binary = []
 ternary = []
 quaternary = []
- 
 
+print(sys.argv[1])
 def adj_list_to_adj_matrix_real(adj_list, variables):
     #print("REAL MATRIX " , adj_list)
     variables = pd.DataFrame(variables)
@@ -53,17 +53,21 @@ def plot_dataset(data_x_axis, data_y_axis,density, cardinality, number_trajector
     id_1 = cardinality + "_0" + str(density)
 
     id_2 = 0
-    if (number_trajectories == "150x2"):
+    if (number_trajectories == "100"):
         id_2 = 1
-    elif (number_trajectories == "300"):
+    elif (number_trajectories == "150"):
         id_2 = 2
-   
+    elif (number_trajectories == "150x2"):
+        id_2 = 3
+    elif (number_trajectories == "300"):
+        id_2 = 4
+
     for x in range(len(data_y_axis)):
         to_plot[id_1][id_2].append(data_y_axis[x])
 
     with open('./output/to_plot.json' , 'w') as f:
         json.dump(to_plot, f)
-
+    """
     ax = sns.lineplot( x = 'number of variables' , y = 'f1 score', marker = 'o', data = dataset)
     ax.set_xticks(data_x_axis)
     ax.set_title(cardinality+" data with 0"+str(density)+" density and "+ \
@@ -73,8 +77,8 @@ str(number_trajectories)+" indipendent trajectories")
     ax.savefig("output/%s.pdf" %name)
     print("Saving graph " , name)
     ax.clf()
+    """
 
-    #dataset.drop(dataset.index[[0,(len(dataset.index)-1)]])
 def build_dataset(data_to_plot):
     data_x_axis.append(data_to_plot.pop(0))
     mean = statistics.mean(data_to_plot)
@@ -104,10 +108,7 @@ for i in range(4): # cardinality = 01, 02, 03, 04
         quaternary[i].append(list(array_nodes[t]))
     quaternary[i].pop()
 
-with open('params.yaml') as file:
-    documents = yaml.full_load(file)
-    #number_trajectories = str(documents['feature']['number_trajectories'])
-    number_trajectories = "300"
+number_trajectories = str(sys.argv[1])
 
 with open("./output/%s/estimateStructure.json" %number_trajectories) as f:
     estimate_data = json.load(f)

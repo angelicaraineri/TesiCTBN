@@ -1,17 +1,24 @@
+import sys
 import multiprocessing
 import glob
 import json
 import os
-from PyCTBN import JsonImporter
+from PyCTBN import SampleImporter
 from PyCTBN import SamplePath
 from PyCTBN import StructureConstraintBasedEstimator
 import yaml
 from sklearn.utils import resample
 import random
 import itertools
-
+import pandas as pd
+import numpy as np
 
 class main():
+    
+    number_trajectories = str(sys.argv[1])
+
+    print(number_trajectories)
+
     y = []
     list_of_path = []
     list_of_combination = []
@@ -20,7 +27,6 @@ class main():
 
     with open('params.yaml') as file:
         documents = yaml.full_load(file)
-        number_trajectories = str(documents['feature']['number_trajectories'])
         number_variables = documents['feature']['number_variables']
         cardinality = documents['feature']['cardinality']
         density = documents['feature']['density']      
@@ -43,58 +49,49 @@ class main():
     for x in range(len(list_of_path)):
         read_files = glob.glob(os.path.join(list_of_path[x], "*.json"))
         for i in range(len(read_files)):
-            print("Lunghezza " , len(read_files))
             print(" ")
             print(read_files[i])
-            importer = JsonImporter(file_path=read_files[i], samples_label='samples',
-                                structure_label='dyn.str', variables_label='variables',
-                                time_key='Time', variables_key='Name')
-        
-            importer.import_data(0)
 
-            if (number_trajectories == "150x2"):
-                traj = 150
-            else:
-                traj = int(number_trajectories)
+            with open(read_files[i]) as f:
+                raw_data = json.load(f)
 
-            if (number_trajectories != "300"):
-                samples = importer._raw_data[0]['samples']
-                y = random.sample(samples, traj)
+                variables = pd.DataFrame(raw_data["variables"])
+                prior_net_structure = pd.DataFrame(raw_data["dyn.str"])
+                trajectories_list_raw = raw_data["samples"]
+                #trajectories_list = [pd.DataFrame(sample) for sample in trajectories_list_raw]
+                if (number_trajectories == "150x2"):
+                    traj = 150
+                else:
+                    traj = int(number_trajectories)
+
+                if (number_trajectories != "300"):
+                    y = random.sample(trajectories_list_raw, traj)
                 if(number_trajectories == "150"):
-                    importer._raw_data[0]['samples'] = y
+                    trajectories_list = [pd.DataFrame(sample) for sample in y]
+                    augmented_trajectories_list = trajectories_list
                 elif(number_trajectories == "150x2"):
-                    newSamples = resample(y, n_samples=300, replace=True,random_state=0)
-                    importer._raw_data[0]['samples'] = newSamples
-                elif(number_trajectories == "300"):
-                    newSamples = resample(y, n_samples=300, replace=True,random_state=0)
-                    importer._raw_data[0]['samples'] = newSamples
-
-            
-            strut = importer._raw_data[0]['dyn.str']
-            var = importer._raw_data[0]['variables']
-            
+                    trajectories_list = [pd.DataFrame(sample) for sample in y]
+                    augmented_trajectories_list = resample(trajectories_list, replace = True, n_samples = 300 )
+                elif(number_trajectories == "100"):
+                    trajectories_list = [pd.DataFrame(sample) for sample in y]
+                    augmented_trajectories_list = resample(trajectories_list, replace = True, n_samples = 300 )
+                
+            importer = SampleImporter(trajectory_list = augmented_trajectories_list, variables = variables, prior_net_structure = prior_net_structure)
+            importer.import_data()          
 
             json_data_real['%s' %read_files[i]] = []
-            json_data_real['%s' %read_files[i]].append(strut)
-            json_data_real['%s' %read_files[i]].append(var)
-    
-            
-            #with open('./output/realStructure.json' , 'w') as f:
-                #json.dump(json_data_real, f)
+            json_data_real['%s' %read_files[i]].append(prior_net_structure.to_json())
+            json_data_real['%s' %read_files[i]].append(variables.to_json())
     
             s1 = SamplePath(importer=importer)
             s1.build_trajectories()
             s1.build_structure()
             se1 = StructureConstraintBasedEstimator(sample_path=s1, exp_test_alfa=0.1, chi_test_alfa=0.1,
                                                 known_edges=[], thumb_threshold=25)
-            #se1.estimate_structure()
             #print(se1.adjacency_matrix())
             
             json_data_est['%s' %read_files[i]] = list(se1.estimate_structure(True, 2))
-            #with open('./output/estimateStructure.json' , 'w') as f:
-                #json.dump(json_data_est, f)
-            #print("strutture salvate")
-            
+                        
             #completeName =  os.path.join('./output/Structure' , "estimateStructure%s.json" %cont)
             #se1.save_results(completeName)
             # se1.save_plot_estimated_structure_graph(os.path.join('./output' , "estimateStructure%s.png" %cont))
