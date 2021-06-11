@@ -48,19 +48,18 @@ def confusion_matrix(real, predicted):
 
 def plot_dataset(data_x_axis, data_y_axis,density, cardinality, number_trajectories):
     dataset = pd.DataFrame({'f1 score': data_y_axis, 'number of variables' : data_x_axis})
-    print(dataset) 
+
     
     id_1 = cardinality + "_0" + str(density)
 
     id_2 = 0
-    if (number_trajectories == "100"):
+    
+    if (number_trajectories == "150"):
         id_2 = 1
-    elif (number_trajectories == "150"):
-        id_2 = 2
     elif (number_trajectories == "150x2"):
-        id_2 = 3
+        id_2 = 2
     elif (number_trajectories == "300"):
-        id_2 = 4
+        id_2 = 3
 
     for x in range(len(data_y_axis)):
         to_plot[id_1][id_2].append(data_y_axis[x])
@@ -82,8 +81,9 @@ str(number_trajectories)+" indipendent trajectories")
 def build_dataset(data_to_plot):
     data_x_axis.append(data_to_plot.pop(0))
     mean = statistics.mean(data_to_plot)
-    data_y_axis.append(mean)
-    print(statistics.mean(data_to_plot))
+    data_y_axis.append(data_to_plot)
+    #data_y_axis.append([mean])
+    print("data ", data_y_axis)
     return data_x_axis, data_y_axis
 
 def calculate_f1(res):
@@ -165,7 +165,7 @@ for item in estimate_data:
     }
     with open('./output/metrics.json' , 'w') as f:
         json.dump(json_data, f)
-    print("File metrics salvalto")
+
 data_x_axis = []
 data_y_axis = []
 
