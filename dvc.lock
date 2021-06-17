@@ -1,0 +1,130 @@
+schema: '2.0'
+stages:
+  evaluate_structure@300:
+    cmd: python structureEstimation.py 300
+    deps:
+    - path: structureEstimation.py
+      md5: 49a2879ded5267a8352d41aae41d503f
+      size: 4961
+    params:
+      params.yaml:
+        feature.cardinality:
+        - binary
+        - ternary
+        - quaternary
+        feature.density:
+        - 1
+        - 2
+        - 3
+        - 4
+        feature.number_variables:
+        - 3
+        - 4
+        - 5
+        - 6
+        - 10
+        - 15
+        - 20
+    outs:
+    - path: output/300/estimateStructure.json
+      md5: 37d0a350cc3dc383c1c19143c13e25b9
+      size: 243823
+    - path: output/300/realStructure.json
+      md5: 07a19653b24a949fd7a00bf82246c3fc
+      size: 680342
+  evaluate_structure@150x2:
+    cmd: python structureEstimation.py 150x2
+    deps:
+    - path: structureEstimation.py
+      md5: 49a2879ded5267a8352d41aae41d503f
+      size: 4961
+    params:
+      params.yaml:
+        feature.cardinality:
+        - binary
+        - ternary
+        - quaternary
+        feature.density:
+        - 1
+        - 2
+        - 3
+        - 4
+        feature.number_variables:
+        - 3
+        - 4
+        - 5
+        - 6
+        - 10
+        - 15
+        - 20
+    outs:
+    - path: output/150x2/estimateStructure.json
+      md5: 3e5730f887be2de17ea16c9eb27c72ca
+      size: 532795
+    - path: output/150x2/realStructure.json
+      md5: 07a19653b24a949fd7a00bf82246c3fc
+      size: 680342
+  evaluate_structure@100:
+    cmd: python structureEstimation.py 100
+    deps:
+    - path: structureEstimation.py
+      md5: 49a2879ded5267a8352d41aae41d503f
+      size: 4961
+    params:
+      params.yaml:
+        feature.cardinality:
+        - binary
+        - ternary
+        - quaternary
+        feature.density:
+        - 1
+        - 2
+        - 3
+        - 4
+        feature.number_variables:
+        - 3
+        - 4
+        - 5
+        - 6
+        - 10
+        - 15
+        - 20
+    outs:
+    - path: output/100/estimateStructure.json
+      md5: e8936f586880e448d5e845bf877a980b
+      size: 599443
+    - path: output/100/realStructure.json
+      md5: 07a19653b24a949fd7a00bf82246c3fc
+      size: 680342
+  evaluate_structure@150:
+    cmd: python structureEstimation.py 150
+    deps:
+    - path: structureEstimation.py
+      md5: 49a2879ded5267a8352d41aae41d503f
+      size: 4961
+    params:
+      params.yaml:
+        feature.cardinality:
+        - binary
+        - ternary
+        - quaternary
+        feature.density:
+        - 1
+        - 2
+        - 3
+        - 4
+        feature.number_variables:
+        - 3
+        - 4
+        - 5
+        - 6
+        - 10
+        - 15
+        - 20
+    outs:
+    - path: output/150/estimateStructure.json
+      md5: 6c9a1e8accc8b4c161f85745a350d7cb
+      size: 229447
+    - path: output/150/realStructure.json
+      md5: 07a19653b24a949fd7a00bf82246c3fc
+      size: 680342

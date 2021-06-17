@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 from itertools import chain
 import sys
+from pathlib import Path
 
 json_data = {}
 binary = []
@@ -163,7 +164,9 @@ for item in estimate_data:
             'Number of indipendent trajectories' : number_trajectories,
             'Confusion matrix' : conf.tolist()
     }
-    with open('./output/metrics.json' , 'w') as f:
+    out_folder = "output/{}".format(number_trajectories)
+    #Path("{}/".format(out_folder)).mkdir(parents=True, exist_ok=True)
+    with open("{}/metrics.json".format(out_folder), 'w') as f:
         json.dump(json_data, f)
     print("File metrics salvalto")
 data_x_axis = []

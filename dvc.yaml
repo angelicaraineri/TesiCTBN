@@ -6,7 +6,7 @@ stages:
         - 150x2
         - 300
     do:
-        cmd: python3.8 structureEstimation.py ${item}
+        cmd: python structureEstimation.py ${item}
         deps:
         - structureEstimation.py
         params:
@@ -24,7 +24,7 @@ stages:
         - 150x2
         - 300
     do:
-        cmd: python3.8 metricsCalculator.py ${item} output/${item}/realStructure.json output/${item}/estimateStructure.json
+        cmd: python metricsCalculator.py ${item} output/${item}/realStructure.json output/${item}/estimateStructure.json
         deps:
         - metricsCalculator.py
         - output/${item}/realStructure.json

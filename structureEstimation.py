@@ -1,5 +1,6 @@
 import sys
 import multiprocessing
+from pathlib import Path
 import glob
 import json
 import os
@@ -66,6 +67,8 @@ class main():
 
                 if (number_trajectories != "300"):
                     y = random.sample(trajectories_list_raw, traj)
+                else:
+                    augmented_trajectories_list = [pd.DataFrame(sample) for sample in trajectories_list_raw]
                 if(number_trajectories == "150"):
                     trajectories_list = [pd.DataFrame(sample) for sample in y]
                     augmented_trajectories_list = trajectories_list
@@ -90,16 +93,18 @@ class main():
                                                 known_edges=[], thumb_threshold=25)
             #print(se1.adjacency_matrix())
             
-            json_data_est['%s' %read_files[i]] = list(se1.estimate_structure(True, 2))
+            json_data_est['%s' %read_files[i]] = list(se1.estimate_structure(processes_number=32))
                         
             #completeName =  os.path.join('./output/Structure' , "estimateStructure%s.json" %cont)
             #se1.save_results(completeName)
             # se1.save_plot_estimated_structure_graph(os.path.join('./output' , "estimateStructure%s.png" %cont))
             #cont = cont+1
+    out_folder="output/{}".format(number_trajectories)
+    Path("{}/".format(out_folder)).mkdir(parents=True, exist_ok=True)
     
-    with open('./output/realStructure.json' , 'w') as f:
+    with open("{}/realStructure.json".format(out_folder) , 'w') as f:
         json.dump(json_data_real, f)
 
-    with open('./output/estimateStructure.json' , 'w') as f:
+    with open("{}/estimateStructure.json".format(out_folder) , 'w') as f:
         json.dump(json_data_est, f)
     
