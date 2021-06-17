@@ -14,8 +14,10 @@ stages:
         - feature.density
         - feature.number_variables
         outs:
-        - output/${item}/estimateStructure.json
-        - output/${item}/realStructure.json
+          - output/${item}/estimateStructure.json:
+              cache: false
+          - output/${item}/realStructure.json:
+              cache: false
   
   evaluate_metrics:
     foreach:
