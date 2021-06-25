@@ -1,7 +1,7 @@
 stages:
   evaluate_structure:
     foreach:
-        - 100
+        - 100    
         - 150
         - 150x2
         - 300
@@ -16,19 +16,3 @@ stages:
         outs:
         - output/${item}/estimateStructure.json
         - output/${item}/realStructure.json
-  
-  evaluate_metrics:
-    foreach:
-        - 100
-        - 150
-        - 150x2
-        - 300
-    do:
-        cmd: python3.8 metricsCalculator.py ${item} output/${item}/realStructure.json output/${item}/estimateStructure.json
-        deps:
-        - metricsCalculator.py
-        - output/${item}/realStructure.json
-        - output/${item}/estimateStructure.json
-        metrics:
-            - output/${item}/metrics.json:
-                    cache: false

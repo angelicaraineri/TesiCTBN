@@ -1,6 +1,5 @@
 feature:
-  number_trajectories: 100
-  number_variables:
+  number_variables: 
   - 3
   - 4
   - 5
@@ -11,9 +10,7 @@ feature:
   density:
   - 01
   - 02
-  - 03    
+  - 03
   - 04
   cardinality:
   - binary
-  - ternary
-  - quaternary

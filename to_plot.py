@@ -5,9 +5,7 @@ json_data = {}
 json_data["binary_01"] = []
 json_data["binary_02"] = []
 json_data["binary_03"] = []
-#json_data["binary_04"] = []
-
-"""
+json_data["binary_04"] = []
 json_data["ternary_01"] = []
 json_data["ternary_02"] = []
 json_data["ternary_03"] = []
@@ -16,7 +14,7 @@ json_data["quaternary_01"] = []
 json_data["quaternary_02"] = []
 json_data["quaternary_03"] = []
 json_data["quaternary_04"] = []
-"""
+
 
 for item in json_data:
     json_data[item].append(["100"])

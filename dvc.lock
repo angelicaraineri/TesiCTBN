@@ -1,0 +1,90 @@
+schema: '2.0'
+stages:
+  evaluate_structure@150x2:
+    cmd: python3.8 structureEstimation.py 150x2
+    deps:
+    - path: structureEstimation.py
+      md5: d2ae0dfc97f54ad40bef736a4b63e901
+      size: 8097
+    params:
+      params.yaml:
+        feature.cardinality:
+        - binary
+        feature.density:
+        - 1
+        - 2
+        - 3
+        feature.number_variables:
+        - 3
+        - 4
+        - 5
+        - 6
+        - 10
+        - 15
+        - 20
+    outs:
+    - path: output/150x2/estimateStructure.json
+      md5: f15abc8c5e8dc4260d35b63d66e5b05d
+      size: 70125
+    - path: output/150x2/realStructure.json
+      md5: 6816a55261c5502a1b0d44af86ab1d15
+      size: 186861
+  evaluate_structure@150:
+    cmd: python3.8 structureEstimation.py 150
+    deps:
+    - path: structureEstimation.py
+      md5: d2ae0dfc97f54ad40bef736a4b63e901
+      size: 8097
+    params:
+      params.yaml:
+        feature.cardinality:
+        - binary
+        feature.density:
+        - 1
+        - 2
+        - 3
+        feature.number_variables:
+        - 3
+        - 4
+        - 5
+        - 6
+        - 10
+        - 15
+        - 20
+    outs:
+    - path: output/150/estimateStructure.json
+      md5: a81eae4651a43dad68689b24f7ac15f2
+      size: 62097
+    - path: output/150/realStructure.json
+      md5: 6816a55261c5502a1b0d44af86ab1d15
+      size: 186861
+  evaluate_structure@300:
+    cmd: python3.8 structureEstimation.py 300
+    deps:
+    - path: structureEstimation.py
+      md5: e3eddf222d0cfda4c5987dac3b6ec5b4
+      size: 8072
+    params:
+      params.yaml:
+        feature.cardinality:
+        - binary
+        feature.density:
+        - 1
+        - 2
+        - 3
+        - 4
+        feature.number_variables:
+        - 3
+        - 4
+        - 5
+        - 6
+        - 10
+        - 15
+        - 20
+    outs:
+    - path: output/300/estimateStructure.json
+      md5: 34d40c64c16973c028fb3e8bade70ff0
+      size: 94758
+    - path: output/300/realStructure.json
+      md5: 720e7f0e4c4eae5bf0cb238cba15cab3
+      size: 286554

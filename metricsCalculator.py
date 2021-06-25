@@ -18,7 +18,6 @@ quaternary = []
 print(sys.argv[1])
 def adj_list_to_adj_matrix_real(adj_list, variables):
     #print("REAL MATRIX " , adj_list)
-    variables = pd.DataFrame(variables)
     adj_matrix = np.zeros((variables.shape[0], variables.shape[0]))
     for edge in adj_list:
         adj_matrix[variables[variables["Name"] == edge["From"]].index[0],variables[variables["Name"] == edge["To"]].index[0]] = 1
@@ -27,7 +26,7 @@ def adj_list_to_adj_matrix_real(adj_list, variables):
 
 def adj_list_to_adj_matrix_estimate(adj_list, variables):
     #print("ESTIMATE MATRIX " , adj_list)
-    variables = pd.DataFrame(variables)
+    variables = pd.DataFrame(eval(variables))
     adj_matrix = np.zeros((variables.shape[0], variables.shape[0]))
     for edge in adj_list:
         adj_matrix[variables[variables["Name"] == edge[0]].index[0],variables[variables["Name"] == edge[1]].index[0]] = 1
@@ -125,7 +124,7 @@ for item in estimate_data:
     struct_estimate = estimate_data.get(item)
     struct_real = real_data.get(item)[0]
     variables = real_data.get(item)[1]
-
+    print(type(variables))
     res = confusion_matrix(adj_list_to_adj_matrix_real(struct_real, variables),\
                     adj_list_to_adj_matrix_estimate(struct_estimate, variables))
     conf = res[0]
